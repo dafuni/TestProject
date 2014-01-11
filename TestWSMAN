@@ -1,0 +1,12 @@
+$computer = "tkaydc01", "bamboo","tkexch2013", "darkroast"
+$cred = Import-Clixml C:\Users\ifiok\Dropbox\Ifiok\Profile\ificred.xml
+$computer | foreach { 
+
+if ((Test-WSMan -ComputerName $_).productversion -like '*2.0*'){$sess = New-CimSession -sessionoption (New-CimSessionOption -protocol DCOM) -ComputerName $_ -Credential $cred}
+elseif ((Test-WSMan -ComputerName $_).productversion -like '*3.0*'){$sess = New-CimSession -ComputerName $_ -Credential $cred}
+else {"I dont recognize machine"}
+
+}
+
+Get-CimInstance -CimSession (Get-CimSession) -ClassName Win32_operatingsystem
+Get-CimInstance -CimSession (Get-CimSession) -ClassName Win32_LogicalDisk
